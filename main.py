@@ -171,8 +171,11 @@ class Main:
         playlist_id = self._sp.user_playlist_create(
             self._user_id, 'sample_name', public=True, collaborative=False, description='')['id']
 
-        self._sp.user_playlist_add_tracks(
-            self._user_id, playlist_id, self.playlist, position=None)
+        i = 0
+        while i*100 < len(self.playlist):
+            self._sp.user_playlist_add_tracks(
+                self._user_id, playlist_id, self.playlist[i*100:(i+1)*100], position=None)
+            i += 1
 
         return playlist_id, 'sample_name', self.genre, self.expected_duration/600
 
