@@ -4,14 +4,6 @@ from secrets import spotify_user_id, spotify_token, spotify_redirect_uri
 from collections import defaultdict
 import random
 
-from flask import Flask, jsonify, request
-#from flask_cors import CORS
-
-app = Flask(__name__)
-# CORS(app)
-
-playlists_list = []
-
 
 class Main:
     def __init__(self, genre, duration):
@@ -185,59 +177,5 @@ class Main:
         print(self.playlist)
 
 
-@app.route('/playlists', methods=['POST'])
-def make_new_playlist():
-    print(request.json)
-    obj = Main(request.json['genre'], request.json['minutes'])
-    obj.user_tracks()
-    playlist_id, name, gen, minutes = obj.create_playlist()
-    # Also image cover & track names
-
-    new_playlist = {
-        "name": name,
-        "id": playlist_id,
-        'gen': gen,
-        'minutes': minutes
-    }
-    playlists_list.append(new_playlist)
-    return jsonify({'message': "Playlist added succesfully"})
-
-
-@app.route('/playlists')
-def playlists():
-    return jsonify(playlists_list)
-
-
-@app.route('/playlists/<string:playlist_id>')
-def get_playlist(playlist_id):
-    for playlist in playlists_list:
-        if playlist['id'] == jsonify(playlist_id):
-            return playlist
-
-
-@app.route('/playlists/<string:playlist_id>', methods=['PUT'])
-def update_playlist(playlist_id):
-    for playlist in playlists_list:
-        if playlist['id'] == jsonify(playlist_id):
-            gen, minutes = playlist['gen'], playlist['minutes']
-
-    obj = Main(gen, minutes)
-    obj.user_tracks()
-    playlist_id, name, gen, minutes = obj.create_playlist()
-    # Maybe return the new list of tracks?
-    pass
-
-
 if __name__ == '__main__':
-    app.run(debug=False, port=4000)
-
-
-# Tareas:
-
-# 1. SOLUCIONADO
-
-# 2. Los POSTS que se hagan se perderán cd se cierre la app, guardar playlist_list en memoria, invocarla tmb de ahí
-
-# 3. Añadir métodos DELETE y demás que tmb se llamarán desde la app
-
-# 4. Mejorar el algoritmo de creación de la playlist con el método de knapsack que dijo el de ALT
+    
