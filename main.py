@@ -1,10 +1,10 @@
 import sys
+import random
+from collections import defaultdict
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from secrets import spotify_user_id, spotify_token, spotify_redirect_uri
-from collections import defaultdict
-import random
-
 
 class Main:
     def __init__(self, genre, duration):
