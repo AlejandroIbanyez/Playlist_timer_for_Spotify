@@ -1,3 +1,4 @@
+import sys
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from secrets import spotify_user_id, spotify_token, spotify_redirect_uri
@@ -161,15 +162,12 @@ class Main:
     def create_playlist(self):
         self._get_user_id()
         playlist_id = self._sp.user_playlist_create(
-            self._user_id, 'sample_name', public=True, collaborative=False, description='')['id']
-
+            self._user_id, f'{int(self.expected_duration/600)} minutes of {self.genre}', public=True, collaborative=False, description='')['id']
         i = 0
         while i*100 < len(self.playlist):
             self._sp.user_playlist_add_tracks(
                 self._user_id, playlist_id, self.playlist[i*100:(i+1)*100], position=None)
             i += 1
-
-        return playlist_id, 'sample_name', self.genre, self.expected_duration/600
 
     def _proves(self):
         print(self.track_catalog)
@@ -177,5 +175,11 @@ class Main:
         print(self.playlist)
 
 
+def make_new_playlist(genre, time):
+    obj = Main(genre, time)
+    obj.user_tracks()
+    obj.create_playlist()
+
+
 if __name__ == '__main__':
-    
+    make_new_playlist(sys.argv[1], sys.argv[2])
